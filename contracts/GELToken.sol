@@ -1,7 +1,7 @@
 pragma solidity ^0.4.15;
 
 // ----------------------------------------------------------------------------
-// GEL 'GEL Network Token' contract - ERC20 Token Interface implementation
+// GEL 'GEL Token' contract - ERC20 Token Interface implementation
 //
 //
 // Enjoy. (c) ANX International and BokkyPooBah / Bok Consulting Pty Ltd 2017.
@@ -11,7 +11,7 @@ pragma solidity ^0.4.15;
 import "./ERC20Interface.sol";
 import "./Owned.sol";
 import "./SafeMath.sol";
-import "./GELNetworkTokenConfig.sol";
+import "./GELTokenConfig.sol";
 import "./LockedTokens.sol";
 
 
@@ -161,7 +161,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
-    function HazzaNetworkToken()
+    function GELToken()
         ERC20Token(SYMBOL, NAME, DECIMALS, 0)
     {
         lockedTokens = new LockedTokens(this);
@@ -169,7 +169,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     }
 
     // ------------------------------------------------------------------------
-    // Hazza Network to finalise the population of balances - adding the locked tokens to
+    // to finalise the population of balances - adding the locked tokens to
     // this contract and the total supply
     // ------------------------------------------------------------------------
     function finalise() onlyOwner {
@@ -188,7 +188,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // Hazza Network to add token balance before the contract is finalized
+    // to add token balance before the contract is finalized
     // ------------------------------------------------------------------------
     function addTokenBalance(address participant, uint balance, bool kycRequiredFlag) onlyOwner {
         require(!finalised);
@@ -367,7 +367,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // Hazza Network can transfer out any accidentally sent ERC20 tokens
+    // can transfer out any accidentally sent ERC20 tokens
     // ------------------------------------------------------------------------
     function transferAnyERC20Token(address tokenAddress, uint amount)
       onlyOwner returns (bool success) 
