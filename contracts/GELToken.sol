@@ -1,9 +1,8 @@
 pragma solidity ^0.4.15;
 
 // ----------------------------------------------------------------------------
-// HAZ 'Hazza Network Token' contract - ERC20 Token Interface implementation
+// GEL 'GEL Network Token' contract - ERC20 Token Interface implementation
 //
-// Refer to http://hazza.network for further information.
 //
 // Enjoy. (c) ANX International and BokkyPooBah / Bok Consulting Pty Ltd 2017.
 // The MIT Licence.
@@ -12,7 +11,7 @@ pragma solidity ^0.4.15;
 import "./ERC20Interface.sol";
 import "./Owned.sol";
 import "./SafeMath.sol";
-import "./HazzaNetworkTokenConfig.sol";
+import "./GELNetworkTokenConfig.sol";
 import "./LockedTokens.sol";
 
 
@@ -138,9 +137,9 @@ contract ERC20Token is ERC20Interface, Owned {
 
 
 // ----------------------------------------------------------------------------
-// Hazza Network token smart contract
+// token smart contract
 // ----------------------------------------------------------------------------
-contract HazzaNetworkToken is ERC20Token, HazzaNetworkTokenConfig {
+contract GELToken is ERC20Token, GELTokenConfig {
 
     // ------------------------------------------------------------------------
     // Have the token balance allocations been finalised?
@@ -204,7 +203,7 @@ contract HazzaNetworkToken is ERC20Token, HazzaNetworkTokenConfig {
     event TokenUnlockedCreated(address indexed participant, uint balance, bool kycRequiredFlag);
 
     // ------------------------------------------------------------------------
-    // Hazza Network to add locked token balance before the contract is finalized
+    // GEL to add locked token balance before the contract is finalized
     // ------------------------------------------------------------------------
     function addTokenBalance6MLocked(address participant, uint balance) onlyOwner {
         require(!finalised);
@@ -216,28 +215,16 @@ contract HazzaNetworkToken is ERC20Token, HazzaNetworkTokenConfig {
     event TokenLocked6MCreated(address indexed participant, uint balance);
 
     // ------------------------------------------------------------------------
-    // Hazza Network to add locked token balance before the contract is finalized
+    // GEL to add locked token balance before the contract is finalized
     // ------------------------------------------------------------------------
-    function addTokenBalance8MLocked(address participant, uint balance) onlyOwner {
+    function addTokenBalance24MLocked(address participant, uint balance) onlyOwner {
         require(!finalised);
         require(now < START_DATE);
         require(balance > 0);
-        lockedTokens.add8M(participant,balance);
-        TokenLocked8MCreated(participant,balance);
+        lockedTokens.add24M(participant,balance);
+        TokenLocked24MCreated(participant,balance);
     }
-    event TokenLocked8MCreated(address indexed participant, uint balance);
-
-    // ------------------------------------------------------------------------
-    // Hazza Network to add locked token balance before the contract is finalized
-    // ------------------------------------------------------------------------
-    function addTokenBalance12MLocked(address participant, uint balance) onlyOwner {
-        require(!finalised);
-        require(now < START_DATE);
-        require(balance > 0);
-        lockedTokens.add12M(participant,balance);
-        TokenLocked12MCreated(participant,balance);
-    }
-    event TokenLocked12MCreated(address indexed participant, uint balance);
+    event TokenLocked24MCreated(address indexed participant, uint balance);
 
     // ------------------------------------------------------------------------
     // Transfer the balance from owner's account to another account, with KYC
@@ -272,7 +259,7 @@ contract HazzaNetworkToken is ERC20Token, HazzaNetworkTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // Hazza Network to KYC verify the participant's account
+    // GEL to KYC verify the participant's account
     // ------------------------------------------------------------------------
     function kycVerify(address participant) onlyOwner {
         kycRequired[participant] = false;
@@ -316,17 +303,10 @@ contract HazzaNetworkToken is ERC20Token, HazzaNetworkTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // 8m locked balances for an account
+    // 24m locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked8M(address account) constant returns (uint balance) {
-        return lockedTokens.balanceOfLocked8M(account);
-    }
-
-    // ------------------------------------------------------------------------
-    // 12m locked balances for an account
-    // ------------------------------------------------------------------------
-    function balanceOfLocked12M(address account) constant returns (uint balance) {
-        return lockedTokens.balanceOfLocked12M(account);
+    function balanceOfLocked24M(address account) constant returns (uint balance) {
+        return lockedTokens.balanceOfLocked24M(account);
     }
 
 
@@ -351,22 +331,11 @@ contract HazzaNetworkToken is ERC20Token, HazzaNetworkTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // 8m locked total supply
+    // 24m locked total supply
     // ------------------------------------------------------------------------
-    function totalSupplyLocked8M() constant returns (uint) {
+    function totalSupplyLocked24M() constant returns (uint) {
         if (finalised) {
-            return lockedTokens.totalSupplyLocked8M();
-        } else {
-            return 0;
-        }
-    }
-
-    // ------------------------------------------------------------------------
-    // 12m locked total supply
-    // ------------------------------------------------------------------------
-    function totalSupplyLocked12M() constant returns (uint) {
-        if (finalised) {
-            return lockedTokens.totalSupplyLocked12M();
+            return lockedTokens.totalSupplyLocked24M();
         } else {
             return 0;
         }

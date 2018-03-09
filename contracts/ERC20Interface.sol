@@ -1,9 +1,8 @@
 pragma solidity ^0.4.15;
 
 // ----------------------------------------------------------------------------
-// HAZ 'Hazza Network Token' contract - ERC20 Token Interface
+// GEL 'GEL Token' contract - ERC20 Token Interface
 //
-// Refer to http://hazza.network for further information.
 //
 // Enjoy. (c) ANX International and BokkyPooBah / Bok Consulting Pty Ltd 2017.
 // The MIT Licence.

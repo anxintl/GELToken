@@ -1,6 +1,6 @@
-# Hazza Network Token Contract
+# GEL Token Contract
 
-Website: [http://hazza.network/](http://hazza.network/)
+Website: [http://XXX/](http://XXX/)
 
 <br />
 
@@ -26,19 +26,18 @@ Website: [http://hazza.network/](http://hazza.network/)
 # Requirements
 
 * Token Identifier
-  * symbol `HAZ`
-  * name `Hazza Network Token`
+  * symbol `GEL`
+  * name `GEL Token`
   * decimals `18`
 
 * Total Suppy of Tokens
   * The total supply of tokens will be determined by the number of tokens sold by the end of the sale.
   * The total supply of 6 month locked tokens is: TBC
-  * The total supply of 8 month locked tokens is: TBC
-  * The total supply of 12 month locked tokens is: TBC
+  * The total supply of 24 month locked tokens is: TBC
 
 * Off Chain Public Sale of Tokens
   * The tokens sale will be conducted off-chain
-  * On completion of the sale, the contract owner will make multiple calls to add 6, 8, and 12 month locked balances, and unlocked balances
+  * On completion of the sale, the contract owner will make multiple calls to add 6, and 24 month locked balances, and unlocked balances
   * After reconciliation, the token contract will be finalized and no further tokens can be allocated.
 
 * KYC on unlocked balances
@@ -47,7 +46,7 @@ Website: [http://hazza.network/](http://hazza.network/)
 
 * `finalise()` The Token Balances
   * Hazza Network calls `finalise()` to close the allocation of balances to the contract. 
-  * The `finalise()` function will allocate the 6, 8, and 12 month locked tokens
+  * The `finalise()` function will allocate the 6 and 24 month locked tokens
   
 <br />
 
@@ -73,7 +72,7 @@ Following are the functions that can be called at the different phases of the co
 ## Before Start Date and Before Finalised
 
 * Owner can call `addTokenBalance(...)` to add participant balances, and flag if KYC is required
-* Owner can call `addTokenBalance[6|8|12]MLocked(...)` to add locked participant balances, assumes no KYC is required
+* Owner can call `addTokenBalance[6|24]MLocked(...)` to add locked participant balances, assumes no KYC is required
 
 ## Before Start Date Or Finalised
 
@@ -84,12 +83,12 @@ Following are the functions that can be called at the different phases of the co
 * Owner calls `kycVerify(...)` to verify participants.
 * Participant can call the normal `transfer(...)`, `approve(...)` and `transferFrom(...)` to transfer tokens
 
-## After 6 months, 8 months, and 12 months
+## After 6 months, and 24 months
 
-* Participants with locked tokens can call the `lockedTokens.unlock6M()` , `lockedTokens.unlock8M()` and `lockedTokens.unlock12M()` to unlock their tokens
+* Participants with locked tokens can call the `lockedTokens.unlock6M()` and `lockedTokens.unlock24M()` to unlock their tokens
   * Find the address of the LockedTokens contract from the lockedTokens variable in the token contract
   * Watch the LockedTokens address using the LockedTokens Application Binary Interface
-  * Execute `unlock6M()` after 6 months has passed, `unlock9M()` after 9 months has passed, or `unlock12M()` after 12 months has passed, to unlock the tokens
+  * Execute `unlock6M()` after 6 months has passed or `unlock24M()` after 24 months has passed, to unlock the tokens
 
 <br />
 
@@ -109,7 +108,7 @@ See [test](test) for details.
 * Check Solidity [release history](https://github.com/ethereum/solidity/releases) for potential bugs 
 * Deploy contract to Mainnet
 * Verify the source code on EtherScan.io
-  * Verify the main Hazza Network contract
+  * Verify the main GEL Token contract
   * Verify the LockedToken contract
 
 <br />
@@ -118,7 +117,7 @@ See [test](test) for details.
 
 # Credits
 
-Thanks to the excellent work from BokkyPoohBah on the openANX project which was used as the template for this contract.
+Thanks to the excellent work from BokkyPoohBah on the OAX project which was used as the template for this contract.
 
 (c) ANX International 2017. The MIT Licence.
 <br />
