@@ -47,8 +47,7 @@ contract LockedTokens is GELTokenConfig {
 
         // any locked token balances known in advance of contract deployment can be added here
         // add6M(0xaBBa43E7594E3B76afB157989e93c6621497FD4b, 2000000 * DECIMALSFACTOR);
-        // add8M(0xAddA9B762A00FF12711113bfDc36958B73d7F915, 2000000 * DECIMALSFACTOR);
-        // add12M(0xAddA9B762A00FF12711113bfDc36958B73d7F915, 2000000 * DECIMALSFACTOR);
+        // add24M(0xAddA9B762A00FF12711113bfDc36958B73d7F915, 2000000 * DECIMALSFACTOR);
 
     }
 

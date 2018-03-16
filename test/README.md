@@ -53,15 +53,11 @@
 * Test 5 Move Tokens After Finalising
 * Test 6 Unlock Tokens 1
   * Test 6.1 Unlock 6M Locked Token
-  * Test 6.2 Unsuccessfully Unlock 8M Locked Token
-  * Test 6.2 Unsuccessfully Unlock 12M Locked Token
+  * Test 6.2 Unsuccessfully Unlock 24M Locked Token
 * Test 7 Unlock Tokens 2
-  * Test 7.1 Successfully Unlock 8M Locked Token
-  * Test 7.2 Unsuccessfully Unlock 12M Locked Token
-* Test 8 Unlock Tokens 2
-  * Test 8.1 Successfully Unlock 12M Locked Token
-* Test 9 Burn Tokens
-* Test 10 Change Ownership
+  * Test 7.1 Successfully Unlock 24M Locked Token
+* Test 8 Burn Tokens
+* Test 9 Change Ownership
 
 ## Todo
 * Execute un-permissioned functions

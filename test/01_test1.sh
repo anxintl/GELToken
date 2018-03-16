@@ -221,12 +221,12 @@ printTxData("tx2_1_4", tx2_1_4);
 printTxData("tx2_1_5", tx2_1_5);
 printTxData("tx2_1_6", tx2_1_6);
 printBalances();
-passIfGasEqualsGasUsed(tx2_1_1, testMessage + " - transfer 0.000001 HAZ ac2 -> ac5. CHECK no movement");
-passIfGasEqualsGasUsed(tx2_1_2, testMessage + " - transfer 0.0002 HAZ ac4 -> ac6. CHECK no movement");
-failIfGasEqualsGasUsed(tx2_1_3, testMessage + " - approve 0.03 HAZ ac3 -> ac7");
-failIfGasEqualsGasUsed(tx2_1_4, testMessage + " - approve 4 HAZ ac4 -> ac8");
-passIfGasEqualsGasUsed(tx2_1_5, testMessage + " - transferFrom 0.03 HAZ ac3 -> ac5. CHECK no movement");
-passIfGasEqualsGasUsed(tx2_1_6, testMessage + " - transferFrom 4 HAZ ac4 -> ac6. CHECK no movement");
+passIfGasEqualsGasUsed(tx2_1_1, testMessage + " - transfer 0.000001 GEL ac2 -> ac5. CHECK no movement");
+passIfGasEqualsGasUsed(tx2_1_2, testMessage + " - transfer 0.0002 GEL ac4 -> ac6. CHECK no movement");
+failIfGasEqualsGasUsed(tx2_1_3, testMessage + " - approve 0.03 GEL ac3 -> ac7");
+failIfGasEqualsGasUsed(tx2_1_4, testMessage + " - approve 4 GEL ac4 -> ac8");
+passIfGasEqualsGasUsed(tx2_1_5, testMessage + " - transferFrom 0.03 GEL ac3 -> ac5. CHECK no movement");
+passIfGasEqualsGasUsed(tx2_1_6, testMessage + " - transferFrom 4 GEL ac4 -> ac6. CHECK no movement");
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
@@ -282,12 +282,12 @@ printTxData("tx5_1_4", tx5_1_4);
 printTxData("tx5_1_5", tx5_1_5);
 printTxData("tx5_1_6", tx5_1_6);
 printBalances();
-failIfGasEqualsGasUsed(tx5_1_1, testMessage + " - transfer 0.000001 HAZ ac2 -> ac5. CHECK for movement");
-passIfGasEqualsGasUsed(tx5_1_2, testMessage + " - transfer 0.0002 HAZ ac4 -> ac5. CHECK no movement");
-failIfGasEqualsGasUsed(tx5_1_3, testMessage + " - approve 0.03 HAZ ac3 -> ac5");
-failIfGasEqualsGasUsed(tx5_1_4, testMessage + " - approve 4 HAZ ac4 -> ac5");
-failIfGasEqualsGasUsed(tx5_1_5, testMessage + " - transferFrom 0.03 HAZ ac3 -> ac5. CHECK for movement");
-passIfGasEqualsGasUsed(tx5_1_6, testMessage + " - transferFrom 4 HAZ ac4 -> ac6. CHECK no movement");
+failIfGasEqualsGasUsed(tx5_1_1, testMessage + " - transfer 0.000001 GEL ac2 -> ac5. CHECK for movement");
+passIfGasEqualsGasUsed(tx5_1_2, testMessage + " - transfer 0.0002 GEL ac4 -> ac5. CHECK no movement");
+failIfGasEqualsGasUsed(tx5_1_3, testMessage + " - approve 0.03 GEL ac3 -> ac5");
+failIfGasEqualsGasUsed(tx5_1_4, testMessage + " - approve 4 GEL ac4 -> ac5");
+failIfGasEqualsGasUsed(tx5_1_5, testMessage + " - transferFrom 0.03 GEL ac3 -> ac5. CHECK for movement");
+passIfGasEqualsGasUsed(tx5_1_6, testMessage + " - transferFrom 4 GEL ac4 -> ac6. CHECK no movement");
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
@@ -320,6 +320,17 @@ failIfGasEqualsGasUsed(tx6_1_1, testMessage);
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
+// -----------------------------------------------------------------------------
+var testMessage = "Test 6.2 Unsuccessfully Unlock 24M Locked Token";
+console.log("RESULT: " + testMessage);
+var tx6_2_1 = lockedTokens.unlock24M({from: contributorAccountLocked24M, gas: 4000000});
+while (txpool.status.pending > 0) {
+}
+printTxData("tx6_2_1", tx6_2_1);
+printBalances();
+passIfGasEqualsGasUsed(tx6_2_1, testMessage);
+printTokenContractDynamicDetails();
+console.log("RESULT: ");
 
 // -----------------------------------------------------------------------------
 // Wait for 24M unlocked date
@@ -366,12 +377,12 @@ printTxData("tx8_1_4", tx8_1_4);
 printTxData("tx8_1_5", tx8_1_5);
 printTxData("tx8_1_6", tx8_1_6);
 printBalances();
-failIfGasEqualsGasUsed(tx8_1_1, testMessage + " - burn 0.0001 HAZ ac2. CHECK no movement");
-passIfGasEqualsGasUsed(tx8_1_2, testMessage + " - burn 0.000001 HAZ ac5. CHECK no movement");
-failIfGasEqualsGasUsed(tx8_1_3, testMessage + " - approve burn 3 HAZ ac3");
-failIfGasEqualsGasUsed(tx8_1_4, testMessage + " - approve burn 400 HAZ ac4");
-failIfGasEqualsGasUsed(tx8_1_5, testMessage + " - burn 3 HAZ ac3 from ac3. CHECK for movement");
-failIfGasEqualsGasUsed(tx8_1_6, testMessage + " - burn 400 HAZ ac4 from ac8. CHECK for movement");
+failIfGasEqualsGasUsed(tx8_1_1, testMessage + " - burn 0.0001 GEL ac2. CHECK no movement");
+passIfGasEqualsGasUsed(tx8_1_2, testMessage + " - burn 0.000001 GEL ac5. CHECK no movement");
+failIfGasEqualsGasUsed(tx8_1_3, testMessage + " - approve burn 3 GEL ac3");
+failIfGasEqualsGasUsed(tx8_1_4, testMessage + " - approve burn 400 GEL ac4");
+failIfGasEqualsGasUsed(tx8_1_5, testMessage + " - burn 3 GEL ac3 from ac3. CHECK for movement");
+failIfGasEqualsGasUsed(tx8_1_6, testMessage + " - burn 400 GEL ac4 from ac8. CHECK for movement");
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
@@ -385,8 +396,8 @@ while (txpool.status.pending > 0) {
 var tx9_1_2 = token.acceptOwnership({from: minerAccount, gas: 100000});
 while (txpool.status.pending > 0) {
 }
-printTxData("tx9_1_1", tx10_1_1);
-printTxData("tx9_1_2", tx10_1_2);
+printTxData("tx9_1_1", tx9_1_1);
+printTxData("tx9_1_2", tx9_1_2);
 printBalances();
 failIfGasEqualsGasUsed(tx9_1_1, testMessage + " - Change owner");
 failIfGasEqualsGasUsed(tx9_1_2, testMessage + " - Accept ownership");
