@@ -21,9 +21,8 @@ addAccount(eth.accounts[10], "Account #10");
 addAccount(eth.accounts[11], "Account #11");
 addAccount(eth.accounts[12], "Account #12 - Unlocked");
 addAccount(eth.accounts[13], "Account #13 - 6M Locked");
-addAccount(eth.accounts[14], "Account #14 - 8M Locked");
-addAccount(eth.accounts[15], "Account #15 - 12M Locked");
-addAccount(eth.accounts[16], "Account #16");
+addAccount(eth.accounts[14], "Account #14 - 24M Locked");
+addAccount(eth.accounts[15], "Account #15");
 addAccount("0x0000000000000000000000000000000000000000", "Burn Account");
 
 
@@ -42,9 +41,8 @@ var account10 = eth.accounts[10];
 var account11 = eth.accounts[11];
 var contributorAccountUnLocked = eth.accounts[12];
 var contributorAccountLocked6M = eth.accounts[13];
-var contributorAccountLocked8M = eth.accounts[14];
-var contributorAccountLocked12M = eth.accounts[15];
-var account16 = eth.accounts[16];
+var contributorAccountLocked24M = eth.accounts[14];
+var account16 = eth.accounts[15];
 
 var baseBlock = eth.blockNumber;
 
@@ -84,34 +82,30 @@ function printBalances() {
   var i = 0;
   var totalTokenBalanceUnlocked = new BigNumber(0);
   var totalTokenBalance6M = new BigNumber(0);
-  var totalTokenBalance8M = new BigNumber(0);
-  var totalTokenBalance12M = new BigNumber(0);
+  var totalTokenBalance24M = new BigNumber(0);
   var totalTokenBalance = new BigNumber(0);
-  console.log("RESULT:  # Account                                             EtherBalanceChange                 Unlocked Token                      Locked 6M                      Locked 8M                     Locked 12M                          Total Name");
-  console.log("RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------");
+  console.log("RESULT:  # Account                                             EtherBalanceChange                 Unlocked Token                      Locked 6M                      Locked 24M                          Total Name");
+  console.log("RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------");
   accounts.forEach(function(e) {
     i++;
     var etherBalanceBaseBlock = eth.getBalance(e, baseBlock);
     var etherBalance = web3.fromWei(eth.getBalance(e).minus(etherBalanceBaseBlock), "ether");
     var tokenBalanceUnlocked = token == null ? new BigNumber(0) : token.balanceOf(e).shift(-decimals);
     var tokenBalance6M = lockedTokenContract == null ? new BigNumber(0) : lockedTokenContract.balanceOfLocked6M(e).shift(-decimals);
-    var tokenBalance8M = lockedTokenContract == null ? new BigNumber(0) : lockedTokenContract.balanceOfLocked8M(e).shift(-decimals);
-    var tokenBalance12M = lockedTokenContract == null ? new BigNumber(0) : lockedTokenContract.balanceOfLocked12M(e).shift(-decimals);
-    var tokenBalance = tokenBalanceUnlocked.add(tokenBalance6M).add(tokenBalance8M).add(tokenBalance12M);
+    var tokenBalance24M = lockedTokenContract == null ? new BigNumber(0) : lockedTokenContract.balanceOfLocked24M(e).shift(-decimals);
+    var tokenBalance = tokenBalanceUnlocked.add(tokenBalance6M).add(tokenBalance24M);
     totalTokenBalanceUnlocked = totalTokenBalanceUnlocked.add(tokenBalanceUnlocked);
     totalTokenBalance6M = totalTokenBalance6M.add(tokenBalance6M);
-    totalTokenBalance8M = totalTokenBalance8M.add(tokenBalance8M);
-    totalTokenBalance12M = totalTokenBalance12M.add(tokenBalance12M);
+    totalTokenBalance24M = totalTokenBalance24M.add(tokenBalance24M);
     totalTokenBalance = totalTokenBalance.add(tokenBalance);
     console.log("RESULT: " + pad2(i) + " " + e  + " " + pad(etherBalance) + " " + padToken(tokenBalanceUnlocked, decimals) + " " + padToken(tokenBalance6M, decimals) + " " +
-        padToken(tokenBalance8M, decimals) + " " + padToken(tokenBalance12M, decimals) + " " +
+         padToken(tokenBalance24M, decimals) + " " +
         padToken(tokenBalance, decimals) + " " + accountNames[e]);
   });
   console.log("RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------");
   console.log("RESULT:                                                                           " + padToken(totalTokenBalanceUnlocked, decimals) + " " + 
       padToken(totalTokenBalance6M, decimals) + " " +
-      padToken(totalTokenBalance8M, decimals) + " " +
-      padToken(totalTokenBalance12M, decimals) + " " +
+      padToken(totalTokenBalance24M, decimals) + " " +
       padToken(totalTokenBalance, decimals) + " Total Token Balances *");
   console.log("RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------");
   console.log("RESULT: * Note that the sum of all the locked tokens is represented in the unlocked balance at the token contract address, and this will be double counted in the grand total balance above");
@@ -232,12 +226,9 @@ function printTokenContractStaticDetails() {
     var locked6MDate = contract.LOCKED_6M_DATE();
     console.log("RESULT: token.LOCKED_6M_DATE=" + locked6MDate + " " + new Date(locked6MDate * 1000).toUTCString()  +
           " / " + new Date(locked6MDate * 1000).toGMTString());
-    var locked8MDate = contract.LOCKED_8M_DATE();
-    console.log("RESULT: token.LOCKED_8M_DATE=" + locked8MDate + " " + new Date(locked8MDate * 1000).toUTCString()  +
-          " / " + new Date(locked8MDate * 1000).toGMTString());
-    var locked12MDate = contract.LOCKED_12M_DATE();
-    console.log("RESULT: token.LOCKED_12M_DATE=" + locked12MDate + " " + new Date(locked12MDate * 1000).toUTCString()  +
-          " / " + new Date(locked12MDate * 1000).toGMTString());
+    var locked24MDate = contract.LOCKED_24M_DATE();
+    console.log("RESULT: token.LOCKED_24M_DATE=" + locked24MDate + " " + new Date(locked24MDate * 1000).toUTCString()  +
+          " / " + new Date(locked24MDate * 1000).toGMTString());
   }
 }
 
@@ -249,7 +240,7 @@ function printTokenContractDynamicDetails() {
     var decimals = contract.decimals();
     console.log("RESULT: token.finalised=" + contract.finalised());
     console.log("RESULT: token.totalSupply=" + contract.totalSupply().shift(-decimals));
-    console.log("RESULT: token.totalSupplyLocked(6M/8M/12M)=" + contract.totalSupplyLocked6M().shift(-decimals) + " / " + contract.totalSupplyLocked8M().shift(-decimals) + " / " + contract.totalSupplyLocked12M().shift(-decimals));
+    console.log("RESULT: token.totalSupplyLocked(6M/24M)=" + contract.totalSupplyLocked6M().shift(-decimals) + " / " + contract.totalSupplyLocked24M().shift(-decimals));
     console.log("RESULT: token.totalSupplyLocked=" + contract.totalSupplyLocked().shift(-decimals));
     console.log("RESULT: token.totalSupplyUnlocked=" + contract.totalSupplyUnlocked().shift(-decimals));
     // console.log("RESULT: token.balanceOfLocked(earlyBackersAccount)(1Y/2Y)=" + contract.balanceOfLocked1Y(earlyBackersAccount).shift(-decimals) + " / " +
@@ -258,8 +249,7 @@ function printTokenContractDynamicDetails() {
     //     contract.balanceOfLocked2Y(developersAccount).shift(-decimals));
 
     console.log("RESULT: lockedToken.totalSupplyLocked6M=" + lockedTokenContract.totalSupplyLocked6M().shift(-decimals));
-    console.log("RESULT: lockedToken.totalSupplyLocked8M=" + lockedTokenContract.totalSupplyLocked8M().shift(-decimals));
-    console.log("RESULT: lockedToken.totalSupplyLocked12M=" + lockedTokenContract.totalSupplyLocked12M().shift(-decimals));
+    console.log("RESULT: lockedToken.totalSupplyLocked24M=" + lockedTokenContract.totalSupplyLocked24M().shift(-decimals));
     console.log("RESULT: lockedToken.totalSupplyLocked=" + lockedTokenContract.totalSupplyLocked().shift(-decimals));
     console.log("RESULT: token.owner=" + contract.owner());
     console.log("RESULT: token.newOwner=" + contract.newOwner());
@@ -294,23 +284,15 @@ function printTokenContractDynamicDetails() {
     });
     tokenLocked6MCreatedEvent.stopWatching();
 
-    var tokenLocked8MCreatedEvent = contract.TokenLocked8MCreated({}, { fromBlock: dynamicDetailsFromBlock, toBlock: latestBlock });
-    i = 0;
-    tokenLocked8MCreatedEvent.watch(function (error, result) {
-        console.log("RESULT: TokenUnlockedCreated Event " + i++ + ": participant=" + result.args.participant +
-            " balance=" + result.args.balance.shift(-decimals) +
-            " block=" + result.blockNumber);
-    });
-    tokenLocked8MCreatedEvent.stopWatching();
 
-    var tokenLocked12MCreatedEvent = contract.TokenLocked12MCreated({}, { fromBlock: dynamicDetailsFromBlock, toBlock: latestBlock });
+    var tokenLocked24MCreatedEvent = contract.TokenLocked24MCreated({}, { fromBlock: dynamicDetailsFromBlock, toBlock: latestBlock });
     i = 0;
-    tokenLocked12MCreatedEvent.watch(function (error, result) {
+    tokenLocked24MCreatedEvent.watch(function (error, result) {
         console.log("RESULT: TokenUnlockedCreated Event " + i++ + ": participant=" + result.args.participant +
             " balance=" + result.args.balance.shift(-decimals) +
             " block=" + result.blockNumber);
     });
-    tokenLocked12MCreatedEvent.stopWatching();
+    tokenLocked24MCreatedEvent.stopWatching();
 
 
     var kycVerifiedEvent = contract.KycVerified({}, { fromBlock: dynamicDetailsFromBlock, toBlock: latestBlock });

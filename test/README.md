@@ -1,4 +1,4 @@
-# Hazza Network Token - Testing
+# GEL Token - Testing
 
 <br />
 

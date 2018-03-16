@@ -1,9 +1,8 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.4.11;
 
 // ----------------------------------------------------------------------------
-// HAZ 'Hazza Network Token' contract locked tokens
+// GEL contract locked tokens
 //
-// Refer to http://hazza.network for further information.
 //
 // Enjoy. (c) ANX International and BokkyPooBah / Bok Consulting Pty Ltd 2017.
 // The MIT Licence.
@@ -11,31 +10,29 @@ pragma solidity ^0.4.15;
 
 import "./ERC20Interface.sol";
 import "./SafeMath.sol";
-import "./HazzaNetworkTokenConfig.sol";
+import "./GELTokenConfig.sol";
 
 
 // ----------------------------------------------------------------------------
 // Contract that holds the locked token information
 // ----------------------------------------------------------------------------
-contract LockedTokens is HazzaNetworkTokenConfig {
+contract LockedTokens is GELTokenConfig {
     using SafeMath for uint;
 
     // ------------------------------------------------------------------------
     // Current totalSupply of locked tokens
     // ------------------------------------------------------------------------
     uint public totalSupplyLocked6M;
-    uint public totalSupplyLocked8M;
-    uint public totalSupplyLocked12M;
+    uint public totalSupplyLocked24M;
 
     // ------------------------------------------------------------------------
     // Locked tokens mapping
     // ------------------------------------------------------------------------
     mapping (address => uint) public balancesLocked6M;
-    mapping (address => uint) public balancesLocked8M;
-    mapping (address => uint) public balancesLocked12M;
+    mapping (address => uint) public balancesLocked24M;
 
     // ------------------------------------------------------------------------
-    // Address of Hazza Network token contract
+    // Address of GEL token contract
     // ------------------------------------------------------------------------
     ERC20Interface public tokenContract;
     address public tokenContractAddress;
@@ -71,21 +68,12 @@ contract LockedTokens is HazzaNetworkTokenConfig {
         totalSupplyLocked6M = totalSupplyLocked6M.add(value);
     }
 
-
     // ------------------------------------------------------------------------
-    // Add to 8m locked balances and totalSupply
+    // Add to 24m locked balances and totalSupply
     // ------------------------------------------------------------------------
-    function add8M(address account, uint value) onlyTokenContract {
-        balancesLocked8M[account] = balancesLocked8M[account].add(value);
-        totalSupplyLocked8M = totalSupplyLocked8M.add(value);
-    }
-
-    // ------------------------------------------------------------------------
-    // Add to 12m locked balances and totalSupply
-    // ------------------------------------------------------------------------
-    function add12M(address account, uint value) onlyTokenContract {
-        balancesLocked12M[account] = balancesLocked12M[account].add(value);
-        totalSupplyLocked12M = totalSupplyLocked12M.add(value);
+    function add24M(address account, uint value) onlyTokenContract {
+        balancesLocked24M[account] = balancesLocked24M[account].add(value);
+        totalSupplyLocked24M = totalSupplyLocked24M.add(value);
     }
 
     // ------------------------------------------------------------------------
@@ -97,17 +85,10 @@ contract LockedTokens is HazzaNetworkTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // 8m locked balances for an account
+    // 24m locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked8M(address account) constant returns (uint balance) {
-        return balancesLocked8M[account];
-    }
-
-    // ------------------------------------------------------------------------
-    // 12m locked balances for an account
-    // ------------------------------------------------------------------------
-    function balanceOfLocked12M(address account) constant returns (uint balance) {
-        return balancesLocked12M[account];
+    function balanceOfLocked24M(address account) constant returns (uint balance) {
+        return balancesLocked24M[account];
     }
 
 
@@ -115,7 +96,7 @@ contract LockedTokens is HazzaNetworkTokenConfig {
     // locked balances for an account
     // ------------------------------------------------------------------------
     function balanceOfLocked(address account) constant returns (uint balance) {
-        return balancesLocked6M[account].add(balancesLocked8M[account]).add(balancesLocked12M[account]);
+        return balancesLocked6M[account].add(balancesLocked24M[account]);
     }
 
 
@@ -123,7 +104,7 @@ contract LockedTokens is HazzaNetworkTokenConfig {
     // locked total supply
     // ------------------------------------------------------------------------
     function totalSupplyLocked() constant returns (uint) {
-        return totalSupplyLocked6M + totalSupplyLocked8M + totalSupplyLocked12M;
+        return totalSupplyLocked6M + totalSupplyLocked24M;
     }
 
     // ------------------------------------------------------------------------
@@ -142,24 +123,13 @@ contract LockedTokens is HazzaNetworkTokenConfig {
     // ------------------------------------------------------------------------
     // An account can unlock their 8m locked tokens 8m after token launch date
     // ------------------------------------------------------------------------
-    function unlock8M() {
-        require(now >= LOCKED_8M_DATE);
-        uint amount = balancesLocked8M[msg.sender];
+    function unlock24M() {
+        require(now >= LOCKED_24M_DATE);
+        uint amount = balancesLocked24M[msg.sender];
         require(amount > 0);
-        balancesLocked8M[msg.sender] = 0;
-        totalSupplyLocked8M = totalSupplyLocked8M.sub(amount);
+        balancesLocked24M[msg.sender] = 0;
+        totalSupplyLocked24M = totalSupplyLocked24M.sub(amount);
         require(tokenContract.transfer(msg.sender, amount));
     }
 
-    // ------------------------------------------------------------------------
-    // An account can unlock their 12m locked tokens 12m after token launch date
-    // ------------------------------------------------------------------------
-    function unlock12M() {
-        require(now >= LOCKED_12M_DATE);
-        uint amount = balancesLocked12M[msg.sender];
-        require(amount > 0);
-        balancesLocked12M[msg.sender] = 0;
-        totalSupplyLocked12M = totalSupplyLocked12M.sub(amount);
-        require(tokenContract.transfer(msg.sender, amount));
-    }    
 }

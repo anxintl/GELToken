@@ -41,11 +41,11 @@ Website: [http://XXX/](http://XXX/)
   * After reconciliation, the token contract will be finalized and no further tokens can be allocated.
 
 * KYC on unlocked balances
-  * The token sale will conduct KYC on all participants. Typically all token balances will be activated at the time of finalisation, however Hazza Network has the ability to deploy balances that remained "locked" until the participant has completed their KYC process.
+  * The token sale will conduct KYC on all participants. Typically all token balances will be activated at the time of finalisation, however GEL has the ability to deploy balances that remained "locked" until the participant has completed their KYC process.
   * The contract assumes KYC has been completed on all locked balances prior to balance allocation.  
 
 * `finalise()` The Token Balances
-  * Hazza Network calls `finalise()` to close the allocation of balances to the contract. 
+  * GEL calls `finalise()` to close the allocation of balances to the contract. 
   * The `finalise()` function will allocate the 6 and 24 month locked tokens
   
 <br />

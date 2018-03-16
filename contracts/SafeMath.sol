@@ -1,9 +1,10 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.4.11;
 
 // ----------------------------------------------------------------------------
-// HAZ 'Hazza Network Token' contract safe maths
+// GEL contract safe maths
 //
-// Refer to http://hazza.network for further information.
+//
+// Refer to http://xxx for further information.
 //
 // Enjoy. (c) ANX International and BokkyPooBah / Bok Consulting Pty Ltd 2017.
 // The MIT Licence.

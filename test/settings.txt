@@ -3,17 +3,19 @@ PASSWORD=testtest
 
 ERC20INTERFACESOL=../contracts/ERC20Interface.sol
 ERC20INTERFACETEMPSOL=ERC20Interface.sol
+ERC20TOKENSOL=../contracts/ERC20Token.sol
+ERC20TOKENTEMPSOL=ERC20Token.sol
 OWNEDSOL=../contracts/Owned.sol
 OWNEDTEMPSOL=Owned.sol
 SAFEMATHSOL=../contracts/SafeMath.sol
 SAFEMATHTEMPSOL=SafeMath.sol
 LOCKEDTOKENSSOL=../contracts/LockedTokens.sol
 LOCKEDTOKENSTEMPSOL=LockedTokens.sol
-TOKENCONFIGSOL=../contracts/HazzaNetworkTokenConfig.sol
-TOKENCONFIGTEMPSOL=HazzaNetworkTokenConfig.sol
-TOKENSOL=../contracts/HazzaNetworkToken.sol
-TOKENTEMPSOL=HazzaNetworkToken.sol
-TOKENJS=HazzaNetworkToken.js
+TOKENCONFIGSOL=../contracts/GELTokenConfig.sol
+TOKENCONFIGTEMPSOL=GELTokenConfig.sol
+TOKENSOL=../contracts/GELToken.sol
+TOKENTEMPSOL=GELToken.sol
+TOKENJS=GELToken.js
 
 DEPLOYMENTDATA=deploymentData.txt
 
