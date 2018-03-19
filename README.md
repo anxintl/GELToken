@@ -14,7 +14,7 @@ Website: [http://XXX/](http://XXX/)
   * [Before Start Date and Before Finalised](#before-start-date-and-before-finalised)
   * [Before Start Date Or Finalised](#before-start-date-or-finalised)
   * [After Finalised and After Start Date](#after-finalised-and-after-start-date)
-  * [After 6 months, and 24 months](#after-6-months-and-24-months)
+  * [After 6 months and 24 months](#after-6-months-and-24-months)
 * [Testing](#testing)
 * [Deployment Checklist](#deployment-checklist)
 
