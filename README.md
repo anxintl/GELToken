@@ -9,12 +9,12 @@ Website: [http://XXX/](http://XXX/)
 # Table of contents
 
 * [Requirements](#requirements)
-* [Operations On The Crowdsale Contract](#operations-on-the-crowdsale-contract)
+* [Operations On The Contract](#operations-on-the-contract)
   * [Anytime](#anytime)
-  * [Before Start Date](#before-start-date)
-  * [After Start Date And Before End Date Or Finalised](#after-start-date-and-before-end-date-or-finalised)
-  * [After Finalised](#after-finalised)
-  * [After 1 Year And 2 Years](#after-1-year-and-2-years)
+  * [Before Start Date and Before Finalised](#before-start-date-and-before-finalised)
+  * [Before Start Date Or Finalised](#before-start-date-or-finalised)
+  * [After Finalised and After Start Date](#after-finalised-and-after-start-date)
+  * [After 6 months, and 24 months](#after-6-months,-and-24-months)
 * [Testing](#testing)
 * [Deployment Checklist](#deployment-checklist)
 
