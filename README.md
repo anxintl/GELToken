@@ -14,7 +14,7 @@ Website: [http://XXX/](http://XXX/)
   * [Before Start Date and Before Finalised](#before-start-date-and-before-finalised)
   * [Before Start Date Or Finalised](#before-start-date-or-finalised)
   * [After Finalised and After Start Date](#after-finalised-and-after-start-date)
-  * [After 6 months, and 24 months](#after-6-months,-and-24-months)
+  * [After 6 months, and 24 months](#after-6-months-and-24-months)
 * [Testing](#testing)
 * [Deployment Checklist](#deployment-checklist)
 
@@ -72,7 +72,7 @@ Following are the functions that can be called at the different phases of the co
 * Owner calls `kycVerify(...)` to verify participants.
 * Participant can call the normal `transfer(...)`, `approve(...)` and `transferFrom(...)` to transfer tokens
 
-## After 6 months, and 24 months
+## After 6 months and 24 months
 
 * Participants with locked tokens can call the `lockedTokens.unlock6M()` and `lockedTokens.unlock24M()` to unlock their tokens
   * Find the address of the LockedTokens contract from the lockedTokens variable in the token contract
