@@ -9,7 +9,6 @@ Website: [http://XXX/](http://XXX/)
 # Table of contents
 
 * [Requirements](#requirements)
-* [TODO](#todo)
 * [Operations On The Crowdsale Contract](#operations-on-the-crowdsale-contract)
   * [Anytime](#anytime)
   * [Before Start Date](#before-start-date)
