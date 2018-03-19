@@ -40,23 +40,13 @@ Website: [http://XXX/](http://XXX/)
   * On completion of the sale, the contract owner will make multiple calls to add 6, and 24 month locked balances, and unlocked balances
   * After reconciliation, the token contract will be finalized and no further tokens can be allocated.
 
-* KYC on unlocked balances
-  * The token sale will conduct KYC on all participants. Typically all token balances will be activated at the time of finalisation, however GEL has the ability to deploy balances that remained "locked" until the participant has completed their KYC process.
-  * The contract assumes KYC has been completed on all locked balances prior to balance allocation.  
+*  KYC on Contributions Over 1,000 USD
+    * Token sale will conduct KYC on all participants that contribute over 1,000 USD. Typically, all token balances will be activated at the time of finalisation, however, GEL has the ability to deploy balances that remain "locked" until the participants has completed their KYC process.
 
 * `finalise()` The Token Balances
   * GEL calls `finalise()` to close the allocation of balances to the contract. 
   * The `finalise()` function will allocate the 6 and 24 month locked tokens
   
-<br />
-
-<hr />
-
-## TODO
-
-* [x] ANX unit tests
-* [ ] TBC to Complete [Security Audit](SecurityAudit.md).
-
 <br />
 
 <hr />
