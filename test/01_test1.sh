@@ -102,7 +102,7 @@ DIFFS=`diff $TOKENCONFIGSOL $TOKENCONFIGTEMPSOL`
 echo "--- Differences ---"
 echo "$DIFFS"
 
-echo "var tokenOutput=`solc --optimize --combined-json abi,bin,interface $TOKENTEMPSOL`;" > $TOKENJS
+echo "var tokenOutput=`solc --evm-version homestead --optimize --combined-json abi,bin,interface $TOKENTEMPSOL`;" > $TOKENJS
 
 geth --verbosity 3 attach $GETHATTACHPOINT << EOF | grep -v '^undefined$' | tee $TEST1OUTPUT
 loadScript("$TOKENJS");

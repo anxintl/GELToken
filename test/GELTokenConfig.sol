@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.21;
 
 // ----------------------------------------------------------------------------
 // GEL'GEL Token' contract configuration
@@ -24,14 +24,14 @@ contract GELTokenConfig {
     // ------------------------------------------------------------------------
     // Decimal factor for multiplications from GEL unit to GEL natural unit
     // ------------------------------------------------------------------------
-    uint public constant DECIMALSFACTOR = 10**uint(DECIMALS);
+    uint public constant DECIMALSFACTOR = 10 ** uint(DECIMALS);
 
     // ------------------------------------------------------------------------
     // Token activation start date
     // Do not use the `now` function here
     // Start - Nov 8 0000 HKT; Nov 7 1600 GMT
     // ------------------------------------------------------------------------
-    uint public constant START_DATE = 1521190026; // Fri Mar 16 08:47:06 UTC 2018
+    uint public constant START_DATE = 1521614905; // Wed Mar 21 06:48:25 UTC 2018
 
     // ------------------------------------------------------------------------
     // dates for locked tokens

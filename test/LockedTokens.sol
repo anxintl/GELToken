@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.21;
 
 // ----------------------------------------------------------------------------
 // GEL contract locked tokens
@@ -28,8 +28,8 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // Locked tokens mapping
     // ------------------------------------------------------------------------
-    mapping (address => uint) public balancesLocked6M;
-    mapping (address => uint) public balancesLocked24M;
+    mapping(address => uint) public balancesLocked6M;
+    mapping(address => uint) public balancesLocked24M;
 
     // ------------------------------------------------------------------------
     // Address of GEL token contract
@@ -41,7 +41,7 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // Constructor - called by token contract
     // ------------------------------------------------------------------------
-    function LockedTokens(address _tokenContract) {
+    function LockedTokens(address _tokenContract) public {
         tokenContract = ERC20Interface(_tokenContract);
         tokenContractAddress = _tokenContract;
 
@@ -62,7 +62,7 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // Add to 6m locked balances and totalSupply
     // ------------------------------------------------------------------------
-    function add6M(address account, uint value) onlyTokenContract {
+    function add6M(address account, uint value) public onlyTokenContract {
         balancesLocked6M[account] = balancesLocked6M[account].add(value);
         totalSupplyLocked6M = totalSupplyLocked6M.add(value);
     }
@@ -70,7 +70,7 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // Add to 24m locked balances and totalSupply
     // ------------------------------------------------------------------------
-    function add24M(address account, uint value) onlyTokenContract {
+    function add24M(address account, uint value) public onlyTokenContract {
         balancesLocked24M[account] = balancesLocked24M[account].add(value);
         totalSupplyLocked24M = totalSupplyLocked24M.add(value);
     }
@@ -78,7 +78,7 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // 6m locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked6M(address account) constant returns (uint balance) {
+    function balanceOfLocked6M(address account) public constant returns (uint balance) {
         return balancesLocked6M[account];
     }
 
@@ -86,7 +86,7 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // 24m locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked24M(address account) constant returns (uint balance) {
+    function balanceOfLocked24M(address account) public constant returns (uint balance) {
         return balancesLocked24M[account];
     }
 
@@ -94,7 +94,7 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked(address account) constant returns (uint balance) {
+    function balanceOfLocked(address account) public constant returns (uint balance) {
         return balancesLocked6M[account].add(balancesLocked24M[account]);
     }
 
@@ -102,14 +102,14 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // locked total supply
     // ------------------------------------------------------------------------
-    function totalSupplyLocked() constant returns (uint) {
+    function totalSupplyLocked() public constant returns (uint) {
         return totalSupplyLocked6M + totalSupplyLocked24M;
     }
 
     // ------------------------------------------------------------------------
     // An account can unlock their 6m locked tokens 6m after token launch date
     // ------------------------------------------------------------------------
-    function unlock6M() {
+    function unlock6M() public {
         require(now >= LOCKED_6M_DATE);
         uint amount = balancesLocked6M[msg.sender];
         require(amount > 0);
@@ -122,7 +122,7 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // An account can unlock their 8m locked tokens 8m after token launch date
     // ------------------------------------------------------------------------
-    function unlock24M() {
+    function unlock24M() public {
         require(now >= LOCKED_24M_DATE);
         uint amount = balancesLocked24M[msg.sender];
         require(amount > 0);

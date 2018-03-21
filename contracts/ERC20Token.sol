@@ -1,4 +1,5 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.21;
+
 import "./ERC20Interface.sol";
 import "./Owned.sol";
 import "./SafeMath.sol";
@@ -24,7 +25,7 @@ contract ERC20Token is ERC20Interface, Owned {
     // ------------------------------------------------------------------------
     // Owner of account approves the transfer of an amount to another account
     // ------------------------------------------------------------------------
-    mapping(address => mapping (address => uint)) allowed;
+    mapping(address => mapping(address => uint)) allowed;
 
 
     // ------------------------------------------------------------------------
@@ -35,7 +36,7 @@ contract ERC20Token is ERC20Interface, Owned {
         string _name,
         uint8 _decimals,
         uint _totalSupply
-    ) Owned() {
+    ) Owned() public {
         symbol = _symbol;
         name = _name;
         decimals = _decimals;
@@ -47,7 +48,7 @@ contract ERC20Token is ERC20Interface, Owned {
     // ------------------------------------------------------------------------
     // Get the account balance of another account with address _owner
     // ------------------------------------------------------------------------
-    function balanceOf(address _owner) constant returns (uint balance) {
+    function balanceOf(address _owner) public constant returns (uint balance) {
         return balances[_owner];
     }
 
@@ -55,14 +56,14 @@ contract ERC20Token is ERC20Interface, Owned {
     // ------------------------------------------------------------------------
     // Transfer the balance from owner's account to another account
     // ------------------------------------------------------------------------
-    function transfer(address _to, uint _amount) returns (bool success) {
+    function transfer(address _to, uint _amount) public returns (bool success) {
         if (balances[msg.sender] >= _amount             // User has balance
         && _amount > 0                              // Non-zero transfer
         && balances[_to] + _amount > balances[_to]  // Overflow check
         ) {
             balances[msg.sender] = balances[msg.sender].sub(_amount);
             balances[_to] = balances[_to].add(_amount);
-            Transfer(msg.sender, _to, _amount);
+            emit Transfer(msg.sender, _to, _amount);
             return true;
         } else {
             return false;
@@ -78,9 +79,9 @@ contract ERC20Token is ERC20Interface, Owned {
     function approve(
         address _spender,
         uint _amount
-    ) returns (bool success) {
+    ) public returns (bool success) {
         allowed[msg.sender][_spender] = _amount;
-        Approval(msg.sender, _spender, _amount);
+        emit Approval(msg.sender, _spender, _amount);
         return true;
     }
 
@@ -94,7 +95,7 @@ contract ERC20Token is ERC20Interface, Owned {
         address _from,
         address _to,
         uint _amount
-    ) returns (bool success) {
+    ) public returns (bool success) {
         if (balances[_from] >= _amount                  // From a/c has balance
         && allowed[_from][msg.sender] >= _amount    // Transfer approved
         && _amount > 0                              // Non-zero transfer
@@ -103,7 +104,7 @@ contract ERC20Token is ERC20Interface, Owned {
             balances[_from] = balances[_from].sub(_amount);
             allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
             balances[_to] = balances[_to].add(_amount);
-            Transfer(_from, _to, _amount);
+            emit Transfer(_from, _to, _amount);
             return true;
         } else {
             return false;
@@ -117,7 +118,7 @@ contract ERC20Token is ERC20Interface, Owned {
     function allowance(
         address _owner,
         address _spender
-    ) constant returns (uint remaining) {
+    ) public constant returns (uint remaining) {
         return allowed[_owner][_spender];
     }
 }

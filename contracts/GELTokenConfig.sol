@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.21;
 
 // ----------------------------------------------------------------------------
 // GEL'GEL Token' contract configuration
@@ -24,7 +24,7 @@ contract GELTokenConfig {
     // ------------------------------------------------------------------------
     // Decimal factor for multiplications from GEL unit to GEL natural unit
     // ------------------------------------------------------------------------
-    uint public constant DECIMALSFACTOR = 10**uint(DECIMALS);
+    uint public constant DECIMALSFACTOR = 10 ** uint(DECIMALS);
 
     // ------------------------------------------------------------------------
     // Token activation start date

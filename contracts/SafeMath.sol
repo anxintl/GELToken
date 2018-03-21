@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.21;
 
 // ----------------------------------------------------------------------------
 // GEL contract safe maths
@@ -19,7 +19,7 @@ library SafeMath {
     // ------------------------------------------------------------------------
     // Add a number to another number, checking for overflows
     // ------------------------------------------------------------------------
-    function add(uint a, uint b) internal returns (uint) {
+    function add(uint a, uint b) internal pure returns (uint) {
         uint c = a + b;
         assert(c >= a && c >= b);
         return c;
@@ -28,7 +28,7 @@ library SafeMath {
     // ------------------------------------------------------------------------
     // Subtract a number from another number, checking for underflows
     // ------------------------------------------------------------------------
-    function sub(uint a, uint b) internal returns (uint) {
+    function sub(uint a, uint b) internal pure returns (uint) {
         assert(b <= a);
         return a - b;
     }

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.21;
 
 // ----------------------------------------------------------------------------
 // GEL 'GEL Token' contract - ERC20 Token Interface implementation
@@ -42,7 +42,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // Constructor
     // ------------------------------------------------------------------------
     function GELToken()
-    ERC20Token(SYMBOL, NAME, DECIMALS, 0)
+    ERC20Token(SYMBOL, NAME, DECIMALS, 0) public
     {
         lockedTokens = new LockedTokens(this);
         require(address(lockedTokens) != 0x0);
@@ -52,7 +52,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // GEL to finalise the population of balances - adding the locked tokens to
     // this contract and the total supply
     // ------------------------------------------------------------------------
-    function finalise() onlyOwner {
+    function finalise() public onlyOwner {
 
         // Can only finalise once
         require(!finalised);
@@ -70,15 +70,15 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // GEL to add token balance before the contract is finalized
     // ------------------------------------------------------------------------
-    function addTokenBalance(address participant, uint balance, bool kycRequiredFlag) onlyOwner {
+    function addTokenBalance(address participant, uint balance, bool kycRequiredFlag) public onlyOwner {
         require(!finalised);
         require(now < START_DATE);
         require(balance > 0);
         balances[participant] = balances[participant].add(balance);
         totalSupply = totalSupply.add(balance);
         kycRequired[participant] = kycRequiredFlag;
-        Transfer(0x0, participant, balance);
-        TokenUnlockedCreated(participant, balance, kycRequiredFlag);
+        emit Transfer(0x0, participant, balance);
+        emit TokenUnlockedCreated(participant, balance, kycRequiredFlag);
     }
 
     event TokenUnlockedCreated(address indexed participant, uint balance, bool kycRequiredFlag);
@@ -86,12 +86,12 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // GEL to add locked token balance before the contract is finalized
     // ------------------------------------------------------------------------
-    function addTokenBalance6MLocked(address participant, uint balance) onlyOwner {
+    function addTokenBalance6MLocked(address participant, uint balance) public onlyOwner {
         require(!finalised);
         require(now < START_DATE);
         require(balance > 0);
         lockedTokens.add6M(participant, balance);
-        TokenLocked6MCreated(participant, balance);
+        emit TokenLocked6MCreated(participant, balance);
     }
 
     event TokenLocked6MCreated(address indexed participant, uint balance);
@@ -99,12 +99,12 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // GEL to add locked token balance before the contract is finalized
     // ------------------------------------------------------------------------
-    function addTokenBalance24MLocked(address participant, uint balance) onlyOwner {
+    function addTokenBalance24MLocked(address participant, uint balance) public onlyOwner {
         require(!finalised);
         require(now < START_DATE);
         require(balance > 0);
         lockedTokens.add24M(participant, balance);
-        TokenLocked24MCreated(participant, balance);
+        emit TokenLocked24MCreated(participant, balance);
     }
 
     event TokenLocked24MCreated(address indexed participant, uint balance);
@@ -112,7 +112,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // Transfer the balance from owner's account to another account, with KYC
     // ------------------------------------------------------------------------
-    function transfer(address _to, uint _amount) returns (bool success) {
+    function transfer(address _to, uint _amount) public returns (bool success) {
         // Cannot transfer before crowdsale ends
         require(finalised);
         require(now > START_DATE);
@@ -128,7 +128,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // balance to another account, with KYC verification check for the
     // participant's first transfer
     // ------------------------------------------------------------------------
-    function transferFrom(address _from, address _to, uint _amount)
+    function transferFrom(address _from, address _to, uint _amount) public
     returns (bool success)
     {
         // Cannot transfer before crowdsale ends
@@ -144,23 +144,23 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // GEL to KYC verify the participant's account
     // ------------------------------------------------------------------------
-    function kycVerify(address participant) onlyOwner {
+    function kycVerify(address participant) public onlyOwner {
         kycRequired[participant] = false;
-        KycVerified(participant);
+        emit KycVerified(participant);
     }
 
     event KycVerified(address indexed participant);
 
 
     // ------------------------------------------------------------------------
-    // Any account can burn _from's tokens as long as the _from account has 
+    // Any account can burn _from's tokens as long as the _from account has
     // approved the _amount to be burnt using
     //   approve(0x0, _amount)
     // ------------------------------------------------------------------------
     function burnFrom(
         address _from,
         uint _amount
-    ) returns (bool success) {
+    ) public returns (bool success) {
         if (balances[_from] >= _amount                  // From a/c has balance
         && allowed[_from][0x0] >= _amount           // Transfer approved
         && _amount > 0                              // Non-zero transfer
@@ -170,7 +170,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
             allowed[_from][0x0] = allowed[_from][0x0].sub(_amount);
             balances[0x0] = balances[0x0].add(_amount);
             totalSupply = totalSupply.sub(_amount);
-            Transfer(_from, 0x0, _amount);
+            emit Transfer(_from, 0x0, _amount);
             return true;
         } else {
             return false;
@@ -181,7 +181,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // 6m locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked6M(address account) constant returns (uint balance) {
+    function balanceOfLocked6M(address account) public constant returns (uint balance) {
         return lockedTokens.balanceOfLocked6M(account);
     }
 
@@ -189,7 +189,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // 24m locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked24M(address account) constant returns (uint balance) {
+    function balanceOfLocked24M(address account) public constant returns (uint balance) {
         return lockedTokens.balanceOfLocked24M(account);
     }
 
@@ -197,7 +197,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked(address account) constant returns (uint balance) {
+    function balanceOfLocked(address account) public constant returns (uint balance) {
         return lockedTokens.balanceOfLocked(account);
     }
 
@@ -205,7 +205,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // 6m locked total supply
     // ------------------------------------------------------------------------
-    function totalSupplyLocked6M() constant returns (uint) {
+    function totalSupplyLocked6M() public constant returns (uint) {
         if (finalised) {
             return lockedTokens.totalSupplyLocked6M();
         } else {
@@ -217,7 +217,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // 24m locked total supply
     // ------------------------------------------------------------------------
-    function totalSupplyLocked24M() constant returns (uint) {
+    function totalSupplyLocked24M() public constant returns (uint) {
         if (finalised) {
             return lockedTokens.totalSupplyLocked24M();
         } else {
@@ -229,7 +229,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // locked total supply
     // ------------------------------------------------------------------------
-    function totalSupplyLocked() constant returns (uint) {
+    function totalSupplyLocked() public constant returns (uint) {
         if (finalised) {
             return lockedTokens.totalSupplyLocked();
         } else {
@@ -241,7 +241,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // Unlocked total supply
     // ------------------------------------------------------------------------
-    function totalSupplyUnlocked() constant returns (uint) {
+    function totalSupplyUnlocked() public constant returns (uint) {
         if (finalised && totalSupply >= lockedTokens.totalSupplyLocked()) {
             return totalSupply.sub(lockedTokens.totalSupplyLocked());
         } else {
@@ -253,7 +253,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // GEL can transfer out any accidentally sent ERC20 tokens
     // ------------------------------------------------------------------------
-    function transferAnyERC20Token(address tokenAddress, uint amount)
+    function transferAnyERC20Token(address tokenAddress, uint amount) public
     onlyOwner returns (bool success)
     {
         return ERC20Interface(tokenAddress).transfer(owner, amount);

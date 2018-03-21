@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.21;
 
 // ----------------------------------------------------------------------------
 // GEL contract ownership
@@ -22,7 +22,7 @@ contract Owned {
     // ------------------------------------------------------------------------
     // Constructor - assign creator as the owner
     // ------------------------------------------------------------------------
-    function Owned() {
+    function Owned() public {
         owner = msg.sender;
     }
 
@@ -39,18 +39,19 @@ contract Owned {
     // ------------------------------------------------------------------------
     // Owner can initiate transfer of contract to a new owner
     // ------------------------------------------------------------------------
-    function transferOwnership(address _newOwner) onlyOwner {
+    function transferOwnership(address _newOwner) public onlyOwner {
         newOwner = _newOwner;
     }
 
- 
+
     // ------------------------------------------------------------------------
     // New owner has to accept transfer of contract
     // ------------------------------------------------------------------------
-    function acceptOwnership() {
+    function acceptOwnership() public {
         require(msg.sender == newOwner);
         owner = newOwner;
-        OwnershipTransferred(owner, newOwner);
+        emit OwnershipTransferred(owner, newOwner);
     }
+
     event OwnershipTransferred(address indexed _from, address indexed _to);
 }
