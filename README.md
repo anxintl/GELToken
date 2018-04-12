@@ -29,10 +29,10 @@ Website: [http://XXX/](http://XXX/)
   * name `GEL Token`
   * decimals `18`
 
-* Total Suppy of Tokens
-  * The total supply of tokens will be determined by the number of tokens sold by the end of the sale.
-  * The total supply of 3 month locked tokens is: TBC
-  * The total supply of 24 month locked tokens is: TBC
+* Total Supply of Tokens
+  * The total supply of tokens is: 100 billion
+  * The total supply of 3 month locked tokens is: 8 billion
+  * The total supply of 24 month locked tokens is: 24 billion
 
 * Off Chain Public Sale of Tokens
   * The tokens sale will be conducted off-chain
