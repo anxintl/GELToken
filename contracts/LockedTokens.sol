@@ -22,13 +22,13 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // Current totalSupply of locked tokens
     // ------------------------------------------------------------------------
-    uint public totalSupplyLocked6M;
+    uint public totalSupplyLocked3M;
     uint public totalSupplyLocked24M;
 
     // ------------------------------------------------------------------------
     // Locked tokens mapping
     // ------------------------------------------------------------------------
-    mapping(address => uint) public balancesLocked6M;
+    mapping(address => uint) public balancesLocked3M;
     mapping(address => uint) public balancesLocked24M;
 
     // ------------------------------------------------------------------------
@@ -46,7 +46,7 @@ contract LockedTokens is GELTokenConfig {
         tokenContractAddress = _tokenContract;
 
         // any locked token balances known in advance of contract deployment can be added here
-        // add6M(0xaBBa43E7594E3B76afB157989e93c6621497FD4b, 2000000 * DECIMALSFACTOR);
+        // add3M(0xaBBa43E7594E3B76afB157989e93c6621497FD4b, 2000000 * DECIMALSFACTOR);
         // add24M(0xAddA9B762A00FF12711113bfDc36958B73d7F915, 2000000 * DECIMALSFACTOR);
 
     }
@@ -60,11 +60,11 @@ contract LockedTokens is GELTokenConfig {
     }
 
     // ------------------------------------------------------------------------
-    // Add to 6m locked balances and totalSupply
+    // Add to 3m locked balances and totalSupply
     // ------------------------------------------------------------------------
-    function add6M(address account, uint value) public onlyTokenContract {
-        balancesLocked6M[account] = balancesLocked6M[account].add(value);
-        totalSupplyLocked6M = totalSupplyLocked6M.add(value);
+    function add3M(address account, uint value) public onlyTokenContract {
+        balancesLocked3M[account] = balancesLocked3M[account].add(value);
+        totalSupplyLocked3M = totalSupplyLocked3M.add(value);
     }
 
     // ------------------------------------------------------------------------
@@ -76,10 +76,10 @@ contract LockedTokens is GELTokenConfig {
     }
 
     // ------------------------------------------------------------------------
-    // 6m locked balances for an account
+    // 3m locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked6M(address account) public constant returns (uint balance) {
-        return balancesLocked6M[account];
+    function balanceOfLocked3M(address account) public constant returns (uint balance) {
+        return balancesLocked3M[account];
     }
 
 
@@ -95,7 +95,7 @@ contract LockedTokens is GELTokenConfig {
     // locked balances for an account
     // ------------------------------------------------------------------------
     function balanceOfLocked(address account) public constant returns (uint balance) {
-        return balancesLocked6M[account].add(balancesLocked24M[account]);
+        return balancesLocked3M[account].add(balancesLocked24M[account]);
     }
 
 
@@ -103,18 +103,18 @@ contract LockedTokens is GELTokenConfig {
     // locked total supply
     // ------------------------------------------------------------------------
     function totalSupplyLocked() public constant returns (uint) {
-        return totalSupplyLocked6M + totalSupplyLocked24M;
+        return totalSupplyLocked3M + totalSupplyLocked24M;
     }
 
     // ------------------------------------------------------------------------
-    // An account can unlock their 6m locked tokens 6m after token launch date
+    // An account can unlock their 3m locked tokens 3m after token launch date
     // ------------------------------------------------------------------------
-    function unlock6M() public {
-        require(now >= LOCKED_6M_DATE);
-        uint amount = balancesLocked6M[msg.sender];
+    function unlock3M() public {
+        require(now >= LOCKED_3M_DATE);
+        uint amount = balancesLocked3M[msg.sender];
         require(amount > 0);
-        balancesLocked6M[msg.sender] = 0;
-        totalSupplyLocked6M = totalSupplyLocked6M.sub(amount);
+        balancesLocked3M[msg.sender] = 0;
+        totalSupplyLocked3M = totalSupplyLocked3M.sub(amount);
         require(tokenContract.transfer(msg.sender, amount));
     }
 

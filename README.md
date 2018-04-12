@@ -74,10 +74,10 @@ Following are the functions that can be called at the different phases of the co
 
 ## After 6 months and 24 months
 
-* Participants with locked tokens can call the `lockedTokens.unlock6M()` and `lockedTokens.unlock24M()` to unlock their tokens
+* Participants with locked tokens can call the `lockedTokens.unlock3M()` and `lockedTokens.unlock24M()` to unlock their tokens
   * Find the address of the LockedTokens contract from the lockedTokens variable in the token contract
   * Watch the LockedTokens address using the LockedTokens Application Binary Interface
-  * Execute `unlock6M()` after 6 months has passed or `unlock24M()` after 24 months has passed, to unlock the tokens
+  * Execute `unlock3M()` after 6 months has passed or `unlock24M()` after 24 months has passed, to unlock the tokens
 
 <br />
 

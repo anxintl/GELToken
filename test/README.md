@@ -52,7 +52,7 @@
 * Test 4 KYC Verify
 * Test 5 Move Tokens After Finalising
 * Test 6 Unlock Tokens 1
-  * Test 6.1 Unlock 6M Locked Token
+  * Test 6.1 Unlock 3M Locked Token
   * Test 6.2 Unsuccessfully Unlock 24M Locked Token
 * Test 7 Unlock Tokens 2
   * Test 7.1 Successfully Unlock 24M Locked Token

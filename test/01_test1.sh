@@ -92,7 +92,7 @@ printf "ENDTIME               = '$ENDTIME' '$ENDTIME_S'\n"
 # --- Modify dates ---
 # START_DATE = +1m
 `perl -pi -e "s/START_DATE = 1510070400;/START_DATE = $STARTTIME; \/\/ $STARTTIME_S/" $TOKENCONFIGTEMPSOL`
-`perl -pi -e "s/LOCKED_6M_DATE = 1525104000;/LOCKED_6M_DATE \= START_DATE \+ 3 minutes;/" $TOKENCONFIGTEMPSOL`
+`perl -pi -e "s/LOCKED_3M_DATE = 1525104000;/LOCKED_3M_DATE \= START_DATE \+ 3 minutes;/" $TOKENCONFIGTEMPSOL`
 `perl -pi -e "s/LOCKED_24M_DATE = 1541001600;/LOCKED_24M_DATE \= START_DATE \+ 4 minutes;/" $TOKENCONFIGTEMPSOL`
 
 # --- Un-internal safeMaths ---
@@ -163,7 +163,7 @@ var tx1_2_2 = token.addTokenBalance(account2, "10000000000000000000000000",true,
 var tx1_2_3 = token.addTokenBalance(account3, "200000000000000000000000000",true, {from: tokenOwnerAccount, gas: 4000000});
 var tx1_2_4 = token.addTokenBalance(account4, "3000000000000000000000000000",true, {from: tokenOwnerAccount, gas: 4000000});
 var tx1_2_5 = token.addTokenBalance(account5, "40000000000000000000000000000",true, {from: tokenOwnerAccount, gas: 4000000});
-var tx1_2_6 = token.addTokenBalance6MLocked(contributorAccountLocked6M, "2000000000000000000000000", {from: tokenOwnerAccount, gas: 4000000});
+var tx1_2_6 = token.addTokenBalance3MLocked(contributorAccountLocked3M, "2000000000000000000000000", {from: tokenOwnerAccount, gas: 4000000});
 var tx1_2_7 = token.addTokenBalance24MLocked(contributorAccountLocked24M, "300000000000000000000000", {from: tokenOwnerAccount, gas: 4000000});
 while (txpool.status.pending > 0) {
 }
@@ -182,7 +182,7 @@ failIfGasEqualsGasUsed(tx1_2_2, testMessage + " - account2");
 failIfGasEqualsGasUsed(tx1_2_3, testMessage + " - account3");
 failIfGasEqualsGasUsed(tx1_2_4, testMessage + " - account4");
 failIfGasEqualsGasUsed(tx1_2_5, testMessage + " - account5");
-failIfGasEqualsGasUsed(tx1_2_6, testMessage + " - contributorAccountLocked6M");
+failIfGasEqualsGasUsed(tx1_2_6, testMessage + " - contributorAccountLocked3M");
 failIfGasEqualsGasUsed(tx1_2_7, testMessage + " - contributorAccountLocked24M");
 
 printTokenContractDynamicDetails();
@@ -293,15 +293,15 @@ console.log("RESULT: ");
 
 
 // -----------------------------------------------------------------------------
-// Wait for 6M unlocked date
+// Wait for 3M unlocked date
 // -----------------------------------------------------------------------------
-var locked6MDateTime = token.LOCKED_6M_DATE();
-var locked6MDateTimeDate = new Date(locked6MDateTime * 1000);
-console.log("RESULT: Waiting until locked 6M date at " + locked6MDateTime + " " + locked6MDateTimeDate +
+var locked3MDateTime = token.LOCKED_3M_DATE();
+var locked3MDateTimeDate = new Date(locked3MDateTime * 1000);
+console.log("RESULT: Waiting until locked 3M date at " + locked3MDateTime + " " + locked3MDateTimeDate +
   " currentDate=" + new Date());
-while ((new Date()).getTime() <= locked6MDateTimeDate.getTime()) {
+while ((new Date()).getTime() <= locked3MDateTimeDate.getTime()) {
 }
-console.log("RESULT: Waited until locked 6M date at " + locked6MDateTime + " " + locked6MDateTimeDate +
+console.log("RESULT: Waited until locked 3M date at " + locked3MDateTime + " " + locked3MDateTimeDate +
   " currentDate=" + new Date());
 
 
@@ -309,9 +309,9 @@ var lockedTokens = eth.contract(lockedTokensAbi).at(token.lockedTokens());
 
 
 // -----------------------------------------------------------------------------
-var testMessage = "Test 6.1 Unlock 6M Locked Token";
+var testMessage = "Test 6.1 Unlock 3M Locked Token";
 console.log("RESULT: " + testMessage);
-var tx6_1_1 = lockedTokens.unlock6M({from: contributorAccountLocked6M, gas: 4000000});
+var tx6_1_1 = lockedTokens.unlock3M({from: contributorAccountLocked3M, gas: 4000000});
 while (txpool.status.pending > 0) {
 }
 printTxData("tx6_1_1", tx6_1_1);

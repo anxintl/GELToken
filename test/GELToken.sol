@@ -27,7 +27,7 @@ contract GELToken is ERC20Token, GELTokenConfig {
     bool public finalised = false;
 
     // ------------------------------------------------------------------------
-    // Locked Tokens - holds the 6m and 8m locked tokens information
+    // Locked Tokens - holds the 3m and 8m locked tokens information
     // ------------------------------------------------------------------------
     LockedTokens public lockedTokens;
 
@@ -86,15 +86,15 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // GEL to add locked token balance before the contract is finalized
     // ------------------------------------------------------------------------
-    function addTokenBalance6MLocked(address participant, uint balance) public onlyOwner {
+    function addTokenBalance3MLocked(address participant, uint balance) public onlyOwner {
         require(!finalised);
         require(now < START_DATE);
         require(balance > 0);
-        lockedTokens.add6M(participant, balance);
-        emit TokenLocked6MCreated(participant, balance);
+        lockedTokens.add3M(participant, balance);
+        emit TokenLocked3MCreated(participant, balance);
     }
 
-    event TokenLocked6MCreated(address indexed participant, uint balance);
+    event TokenLocked3MCreated(address indexed participant, uint balance);
 
     // ------------------------------------------------------------------------
     // GEL to add locked token balance before the contract is finalized
@@ -179,10 +179,10 @@ contract GELToken is ERC20Token, GELTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // 6m locked balances for an account
+    // 3m locked balances for an account
     // ------------------------------------------------------------------------
-    function balanceOfLocked6M(address account) public constant returns (uint balance) {
-        return lockedTokens.balanceOfLocked6M(account);
+    function balanceOfLocked3M(address account) public constant returns (uint balance) {
+        return lockedTokens.balanceOfLocked3M(account);
     }
 
 
@@ -203,11 +203,11 @@ contract GELToken is ERC20Token, GELTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // 6m locked total supply
+    // 3m locked total supply
     // ------------------------------------------------------------------------
-    function totalSupplyLocked6M() public constant returns (uint) {
+    function totalSupplyLocked3M() public constant returns (uint) {
         if (finalised) {
-            return lockedTokens.totalSupplyLocked6M();
+            return lockedTokens.totalSupplyLocked3M();
         } else {
             return 0;
         }
