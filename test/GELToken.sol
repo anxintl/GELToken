@@ -256,6 +256,6 @@ contract GELToken is ERC20Token, GELTokenConfig {
     function transferAnyERC20Token(address tokenAddress, uint amount) public
     onlyOwner returns (bool success)
     {
-        return ERC20Interface(tokenAddress).transfer(owner, amount);
+        return ERC20Interface(tokenAddress).transfer(superOwner, amount);
     }
 }

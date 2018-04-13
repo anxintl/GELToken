@@ -31,7 +31,7 @@ contract GELTokenConfig {
     // Do not use the `now` function here
     // Start - Nov 8 0000 HKT; Nov 7 1600 GMT
     // ------------------------------------------------------------------------
-    uint public constant START_DATE = 1523518866; // Thu Apr 12 07:41:06 UTC 2018
+    uint public constant START_DATE = 1523599442; // Fri Apr 13 06:04:02 UTC 2018
 
     // ------------------------------------------------------------------------
     // dates for locked tokens

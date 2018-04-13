@@ -14,33 +14,77 @@ pragma solidity ^0.4.21;
 contract Owned {
 
     // ------------------------------------------------------------------------
-    // Current owner, and proposed new owner
+    // Current super owner, and proposed new super owner
     // ------------------------------------------------------------------------
-    address public owner;
-    address public newOwner;
+    address public superOwner;
+    address public newSuperOwner;
 
     // ------------------------------------------------------------------------
-    // Constructor - assign creator as the owner
+    // Mapping of the owners
+    // ------------------------------------------------------------------------
+    mapping(address => bool) public owners;
+
+    // ------------------------------------------------------------------------
+    // Constructor - assign creator as the super owner
     // ------------------------------------------------------------------------
     function Owned() public {
-        owner = msg.sender;
+        superOwner = msg.sender;
     }
 
 
     // ------------------------------------------------------------------------
-    // Modifier to mark that a function can only be executed by the owner
+    // Modifier to mark that a function can only be executed by the super owner
     // ------------------------------------------------------------------------
-    modifier onlyOwner {
-        require(msg.sender == owner);
+    modifier onlySuperOwner {
+        require(msg.sender == superOwner);
         _;
     }
 
 
     // ------------------------------------------------------------------------
-    // Owner can initiate transfer of contract to a new owner
+    // Modifier to mark that a function can only be executed by owners
     // ------------------------------------------------------------------------
-    function transferOwnership(address _newOwner) public onlyOwner {
-        newOwner = _newOwner;
+    modifier onlyOwner {
+        require(owners[msg.sender] == true);
+        _;
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Super owner can initiate transfer of contract to a new super owner
+    // ------------------------------------------------------------------------
+    function transferOwnership(address _newSuperOwner) public onlySuperOwner {
+        newSuperOwner = _newSuperOwner;
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Super Owner can add owners
+    // ------------------------------------------------------------------------
+    function addOwner(address _newOwner) public onlySuperOwner {
+        owners[_newOwner] = true;
+        emit OwnerAdded(_newOwner);
+    }
+
+    event OwnerAdded(address indexed _owner);
+
+
+    // ------------------------------------------------------------------------
+    // Super Owner can remove owners
+    // ------------------------------------------------------------------------
+    function removeOwner(address _removeOwner) public onlySuperOwner {
+        owners[_removeOwner] = false;
+        emit OwnerRemoved(_removeOwner);
+    }
+
+    event OwnerRemoved(address indexed _owner);
+
+
+    // ------------------------------------------------------------------------
+    // Check if address is an owner
+    // ------------------------------------------------------------------------
+    function isOwner(address _owner) public view returns (bool success) {
+        return owners[_owner];
     }
 
 
@@ -48,9 +92,9 @@ contract Owned {
     // New owner has to accept transfer of contract
     // ------------------------------------------------------------------------
     function acceptOwnership() public {
-        require(msg.sender == newOwner);
-        owner = newOwner;
-        emit OwnershipTransferred(owner, newOwner);
+        require(msg.sender == newSuperOwner);
+        superOwner = newSuperOwner;
+        emit OwnershipTransferred(superOwner, newSuperOwner);
     }
 
     event OwnershipTransferred(address indexed _from, address indexed _to);

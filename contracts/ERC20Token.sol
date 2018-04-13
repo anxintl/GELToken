@@ -41,7 +41,7 @@ contract ERC20Token is ERC20Interface, Owned {
         name = _name;
         decimals = _decimals;
         totalSupply = _totalSupply;
-        balances[owner] = _totalSupply;
+        balances[superOwner] = _totalSupply;
     }
 
 
