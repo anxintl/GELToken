@@ -45,19 +45,25 @@
 
 * Test 1 Before The Token is Activated
   * Test 1.1 Deploy Token Contract
-  * Test 1.2 Add Locked and unlocked balances
+  * Test 1.2 Super owner can add owner
+  * Test 1.3 Add Locked and unlocked balances
 * Test 2 Cannot Move Tokens Without Finalising
   * `transfer(...)`, `approve(...)` and `transferFrom(...)`
 * Test 3 Finalising
 * Test 4 KYC Verify
 * Test 5 Move Tokens After Finalising
 * Test 6 Unlock Tokens 1
-  * Test 6.1 Unlock 3M Locked Token
-  * Test 6.2 Unsuccessfully Unlock 24M Locked Token
+  * Test 6.1 Unlock 1M Locked Token
+  * Test 6.2 Unsuccessfully Unlock 3M Locked Token
+  * Test 6.3 Unsuccessfully Unlock 24M Locked Token
 * Test 7 Unlock Tokens 2
-  * Test 7.1 Successfully Unlock 24M Locked Token
-* Test 8 Burn Tokens
-* Test 9 Change Ownership
+  * Test 7.1 Successfully Unlock 3M Locked Token
+  * Test 7.1 Unsuccessfully Unlock 24M Locked Token
+* Test 8 Unlock Tokens 3
+  * Test 8.1 Successfully Unlock 24M Locked Token
+* Test 9 Burn Tokens
+* Test 10 Super owner can remove owner
+* Test 11 Change Ownership
 
 ## Todo
 * Execute un-permissioned functions

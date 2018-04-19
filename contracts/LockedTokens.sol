@@ -22,12 +22,14 @@ contract LockedTokens is GELTokenConfig {
     // ------------------------------------------------------------------------
     // Current totalSupply of locked tokens
     // ------------------------------------------------------------------------
+    uint public totalSupplyLocked1M;
     uint public totalSupplyLocked3M;
     uint public totalSupplyLocked24M;
 
     // ------------------------------------------------------------------------
     // Locked tokens mapping
     // ------------------------------------------------------------------------
+    mapping(address => uint) public balancesLocked1M;
     mapping(address => uint) public balancesLocked3M;
     mapping(address => uint) public balancesLocked24M;
 
@@ -60,6 +62,14 @@ contract LockedTokens is GELTokenConfig {
     }
 
     // ------------------------------------------------------------------------
+    // Add to 1m locked balances and totalSupply
+    // ------------------------------------------------------------------------
+    function add1M(address account, uint value) public onlyTokenContract {
+        balancesLocked1M[account] = balancesLocked1M[account].add(value);
+        totalSupplyLocked1M = totalSupplyLocked1M.add(value);
+    }
+
+    // ------------------------------------------------------------------------
     // Add to 3m locked balances and totalSupply
     // ------------------------------------------------------------------------
     function add3M(address account, uint value) public onlyTokenContract {
@@ -73,6 +83,13 @@ contract LockedTokens is GELTokenConfig {
     function add24M(address account, uint value) public onlyTokenContract {
         balancesLocked24M[account] = balancesLocked24M[account].add(value);
         totalSupplyLocked24M = totalSupplyLocked24M.add(value);
+    }
+
+    // ------------------------------------------------------------------------
+    // 1m locked balances for an account
+    // ------------------------------------------------------------------------
+    function balanceOfLocked1M(address account) public constant returns (uint balance) {
+        return balancesLocked1M[account];
     }
 
     // ------------------------------------------------------------------------
@@ -95,7 +112,7 @@ contract LockedTokens is GELTokenConfig {
     // locked balances for an account
     // ------------------------------------------------------------------------
     function balanceOfLocked(address account) public constant returns (uint balance) {
-        return balancesLocked3M[account].add(balancesLocked24M[account]);
+        return balancesLocked1M[account].add(balancesLocked3M[account]).add(balancesLocked24M[account]);
     }
 
 
@@ -103,7 +120,19 @@ contract LockedTokens is GELTokenConfig {
     // locked total supply
     // ------------------------------------------------------------------------
     function totalSupplyLocked() public constant returns (uint) {
-        return totalSupplyLocked3M + totalSupplyLocked24M;
+        return totalSupplyLocked1M + totalSupplyLocked3M + totalSupplyLocked24M;
+    }
+
+    // ------------------------------------------------------------------------
+    // An account can unlock their 1m locked tokens 1m after token launch date
+    // ------------------------------------------------------------------------
+    function unlock1M() public {
+        require(now >= LOCKED_1M_DATE);
+        uint amount = balancesLocked1M[msg.sender];
+        require(amount > 0);
+        balancesLocked1M[msg.sender] = 0;
+        totalSupplyLocked1M = totalSupplyLocked1M.sub(amount);
+        require(tokenContract.transfer(msg.sender, amount));
     }
 
     // ------------------------------------------------------------------------
@@ -120,7 +149,7 @@ contract LockedTokens is GELTokenConfig {
 
 
     // ------------------------------------------------------------------------
-    // An account can unlock their 8m locked tokens 8m after token launch date
+    // An account can unlock their 24m locked tokens 24m after token launch date
     // ------------------------------------------------------------------------
     function unlock24M() public {
         require(now >= LOCKED_24M_DATE);

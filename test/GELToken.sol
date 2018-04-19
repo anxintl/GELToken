@@ -86,6 +86,19 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     // GEL to add locked token balance before the contract is finalized
     // ------------------------------------------------------------------------
+    function addTokenBalance1MLocked(address participant, uint balance) public onlyOwner {
+        require(!finalised);
+        require(now < START_DATE);
+        require(balance > 0);
+        lockedTokens.add1M(participant, balance);
+        emit TokenLocked1MCreated(participant, balance);
+    }
+
+    event TokenLocked1MCreated(address indexed participant, uint balance);
+
+    // ------------------------------------------------------------------------
+    // GEL to add locked token balance before the contract is finalized
+    // ------------------------------------------------------------------------
     function addTokenBalance3MLocked(address participant, uint balance) public onlyOwner {
         require(!finalised);
         require(now < START_DATE);
@@ -179,6 +192,14 @@ contract GELToken is ERC20Token, GELTokenConfig {
 
 
     // ------------------------------------------------------------------------
+    // 1m locked balances for an account
+    // ------------------------------------------------------------------------
+    function balanceOfLocked1M(address account) public constant returns (uint balance) {
+        return lockedTokens.balanceOfLocked1M(account);
+    }
+
+
+    // ------------------------------------------------------------------------
     // 3m locked balances for an account
     // ------------------------------------------------------------------------
     function balanceOfLocked3M(address account) public constant returns (uint balance) {
@@ -199,6 +220,18 @@ contract GELToken is ERC20Token, GELTokenConfig {
     // ------------------------------------------------------------------------
     function balanceOfLocked(address account) public constant returns (uint balance) {
         return lockedTokens.balanceOfLocked(account);
+    }
+
+
+    // ------------------------------------------------------------------------
+    // 1m locked total supply
+    // ------------------------------------------------------------------------
+    function totalSupplyLocked1M() public constant returns (uint) {
+        if (finalised) {
+            return lockedTokens.totalSupplyLocked1M();
+        } else {
+            return 0;
+        }
     }
 
 

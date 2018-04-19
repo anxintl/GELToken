@@ -91,9 +91,10 @@ printf "ENDTIME               = '$ENDTIME' '$ENDTIME_S'\n"
 
 # --- Modify dates ---
 # START_DATE = +1m
-`perl -pi -e "s/START_DATE = 1510070400;/START_DATE = $STARTTIME; \/\/ $STARTTIME_S/" $TOKENCONFIGTEMPSOL`
-`perl -pi -e "s/LOCKED_3M_DATE = 1525104000;/LOCKED_3M_DATE \= START_DATE \+ 3 minutes;/" $TOKENCONFIGTEMPSOL`
-`perl -pi -e "s/LOCKED_24M_DATE = 1541001600;/LOCKED_24M_DATE \= START_DATE \+ 4 minutes;/" $TOKENCONFIGTEMPSOL`
+`perl -pi -e "s/START_DATE = 1510070200;/START_DATE = $STARTTIME; \/\/ $STARTTIME_S/" $TOKENCONFIGTEMPSOL`
+`perl -pi -e "s/LOCKED_1M_DATE = 1510070400;/LOCKED_1M_DATE \= START_DATE \+ 3 minutes;/" $TOKENCONFIGTEMPSOL`
+`perl -pi -e "s/LOCKED_3M_DATE = 1510070600;/LOCKED_3M_DATE \= START_DATE \+ 4 minutes;/" $TOKENCONFIGTEMPSOL`
+`perl -pi -e "s/LOCKED_24M_DATE = 1510070800;/LOCKED_24M_DATE \= START_DATE \+ 5 minutes;/" $TOKENCONFIGTEMPSOL`
 
 # --- Un-internal safeMaths ---
 #`perl -pi -e "s/internal/constant/" $TOKENTEMPSOL`
@@ -172,8 +173,9 @@ var tx1_3_2 = token.addTokenBalance(account2, "10000000000000000000000000",true,
 var tx1_3_3 = token.addTokenBalance(account3, "200000000000000000000000000",true, {from: ownerAccount, gas: 4000000});
 var tx1_3_4 = token.addTokenBalance(account4, "3000000000000000000000000000",true, {from: ownerAccount, gas: 4000000});
 var tx1_3_5 = token.addTokenBalance(account5, "40000000000000000000000000000",true, {from: ownerAccount, gas: 4000000});
-var tx1_3_6 = token.addTokenBalance3MLocked(contributorAccountLocked3M, "2000000000000000000000000", {from: ownerAccount, gas: 4000000});
-var tx1_3_7 = token.addTokenBalance24MLocked(contributorAccountLocked24M, "300000000000000000000000", {from: ownerAccount, gas: 4000000});
+var tx1_3_6 = token.addTokenBalance1MLocked(contributorAccountLocked1M, "1000000000000000000000000", {from: ownerAccount, gas: 4000000});
+var tx1_3_7 = token.addTokenBalance3MLocked(contributorAccountLocked3M, "2000000000000000000000000", {from: ownerAccount, gas: 4000000});
+var tx1_3_8 = token.addTokenBalance24MLocked(contributorAccountLocked24M, "300000000000000000000000", {from: ownerAccount, gas: 4000000});
 while (txpool.status.pending > 0) {
 }
 printTxData("tx1_3_1", tx1_3_1);
@@ -183,6 +185,7 @@ printTxData("tx1_3_4", tx1_3_4);
 printTxData("tx1_3_5", tx1_3_5);
 printTxData("tx1_3_6", tx1_3_6);
 printTxData("tx1_3_7", tx1_3_7);
+printTxData("tx1_3_8", tx1_3_8);
 
 printBalances();
 
@@ -191,8 +194,9 @@ failIfGasEqualsGasUsed(tx1_3_2, testMessage + " - account2");
 failIfGasEqualsGasUsed(tx1_3_3, testMessage + " - account3");
 failIfGasEqualsGasUsed(tx1_3_4, testMessage + " - account4");
 failIfGasEqualsGasUsed(tx1_3_5, testMessage + " - account5");
-failIfGasEqualsGasUsed(tx1_3_6, testMessage + " - contributorAccountLocked3M");
-failIfGasEqualsGasUsed(tx1_3_7, testMessage + " - contributorAccountLocked24M");
+failIfGasEqualsGasUsed(tx1_3_6, testMessage + " - contributorAccountLocked1M");
+failIfGasEqualsGasUsed(tx1_3_7, testMessage + " - contributorAccountLocked3M");
+failIfGasEqualsGasUsed(tx1_3_8, testMessage + " - contributorAccountLocked24M");
 
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
@@ -301,6 +305,60 @@ printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
 
+
+// -----------------------------------------------------------------------------
+// Wait for 1M unlocked date
+// -----------------------------------------------------------------------------
+var locked1MDateTime = token.LOCKED_1M_DATE();
+var locked1MDateTimeDate = new Date(locked1MDateTime * 1000);
+console.log("RESULT: Waiting until locked 1M date at " + locked1MDateTime + " " + locked1MDateTimeDate +
+  " currentDate=" + new Date());
+while ((new Date()).getTime() <= locked1MDateTimeDate.getTime()) {
+}
+console.log("RESULT: Waited until locked 1M date at " + locked1MDateTime + " " + locked1MDateTimeDate +
+  " currentDate=" + new Date());
+
+
+var lockedTokens = eth.contract(lockedTokensAbi).at(token.lockedTokens());
+
+
+// -----------------------------------------------------------------------------
+var testMessage = "Test 6.1 Unlock 1M Locked Token";
+console.log("RESULT: " + testMessage);
+var tx6_1_1 = lockedTokens.unlock1M({from: contributorAccountLocked1M, gas: 4000000});
+while (txpool.status.pending > 0) {
+}
+printTxData("tx6_1_1", tx6_1_1);
+printBalances();
+failIfGasEqualsGasUsed(tx6_1_1, testMessage);
+printTokenContractDynamicDetails();
+console.log("RESULT: ");
+
+// -----------------------------------------------------------------------------
+var testMessage = "Test 6.2 Unsuccessfully Unlock 3M Locked Token";
+console.log("RESULT: " + testMessage);
+var tx6_2_1 = lockedTokens.unlock3M({from: contributorAccountLocked3M, gas: 4000000});
+while (txpool.status.pending > 0) {
+}
+printTxData("tx6_2_1", tx6_2_1);
+printBalances();
+passIfGasEqualsGasUsed(tx6_2_1, testMessage);
+printTokenContractDynamicDetails();
+console.log("RESULT: ");
+
+// -----------------------------------------------------------------------------
+var testMessage = "Test 6.3 Unsuccessfully Unlock 24M Locked Token";
+console.log("RESULT: " + testMessage);
+var tx6_3_1 = lockedTokens.unlock24M({from: contributorAccountLocked24M, gas: 4000000});
+while (txpool.status.pending > 0) {
+}
+printTxData("tx6_3_1", tx6_3_1);
+printBalances();
+passIfGasEqualsGasUsed(tx6_3_1, testMessage);
+printTokenContractDynamicDetails();
+console.log("RESULT: ");
+
+
 // -----------------------------------------------------------------------------
 // Wait for 3M unlocked date
 // -----------------------------------------------------------------------------
@@ -318,26 +376,26 @@ var lockedTokens = eth.contract(lockedTokensAbi).at(token.lockedTokens());
 
 
 // -----------------------------------------------------------------------------
-var testMessage = "Test 6.1 Unlock 3M Locked Token";
+var testMessage = "Test 7.1 Unlock 3M Locked Token";
 console.log("RESULT: " + testMessage);
-var tx6_1_1 = lockedTokens.unlock3M({from: contributorAccountLocked3M, gas: 4000000});
+var tx7_1_1 = lockedTokens.unlock3M({from: contributorAccountLocked3M, gas: 4000000});
 while (txpool.status.pending > 0) {
 }
-printTxData("tx6_1_1", tx6_1_1);
+printTxData("tx7_1_1", tx7_1_1);
 printBalances();
-failIfGasEqualsGasUsed(tx6_1_1, testMessage);
+failIfGasEqualsGasUsed(tx7_1_1, testMessage);
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
 // -----------------------------------------------------------------------------
-var testMessage = "Test 6.2 Unsuccessfully Unlock 24M Locked Token";
+var testMessage = "Test 7.2 Unsuccessfully Unlock 24M Locked Token";
 console.log("RESULT: " + testMessage);
-var tx6_2_1 = lockedTokens.unlock24M({from: contributorAccountLocked24M, gas: 4000000});
+var tx7_2_1 = lockedTokens.unlock24M({from: contributorAccountLocked24M, gas: 4000000});
 while (txpool.status.pending > 0) {
 }
-printTxData("tx6_2_1", tx6_2_1);
+printTxData("tx7_2_1", tx7_2_1);
 printBalances();
-passIfGasEqualsGasUsed(tx6_2_1, testMessage);
+passIfGasEqualsGasUsed(tx7_2_1, testMessage);
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
@@ -355,71 +413,71 @@ console.log("RESULT: Waited until locked 24M date at " + locked24MDateTime + " "
 
 
 // -----------------------------------------------------------------------------
-var testMessage = "Test 7.1 Successfully Unlock 24M Locked Token";
+var testMessage = "Test 8.1 Successfully Unlock 24M Locked Token";
 console.log("RESULT: " + testMessage);
-var tx7_1_1 = lockedTokens.unlock24M({from: contributorAccountLocked24M, gas: 4000000});
-while (txpool.status.pending > 0) {
-}
-printTxData("tx7_1_1", tx7_1_1);
-printBalances();
-failIfGasEqualsGasUsed(tx7_1_1, testMessage);
-printTokenContractDynamicDetails();
-console.log("RESULT: ");
-
-// -----------------------------------------------------------------------------
-var testMessage = "Test 8.1 Burn Tokens";
-console.log("RESULT: " + testMessage);
-var tx8_1_1 = token.burnFrom(account5, "100000000000000", {from: account2, gas: 100000});
-var tx8_1_2 = token.transfer("0x0",    "1000000000000", {from: account5, gas: 100000});
-var tx8_1_3 = token.approve("0x0",     "3000000000000000000", {from: account3, gas: 100000});
-var tx8_1_4 = token.approve("0x0",     "400000000000000000000", {from: account4, gas: 100000});
-while (txpool.status.pending > 0) {
-}
-var tx8_1_5 = token.burnFrom(account3, "3000000000000000000", {from: account3, gas: 100000});
-var tx8_1_6 = token.burnFrom(account4, "400000000000000000000", {from: account8, gas: 100000});
+var tx8_1_1 = lockedTokens.unlock24M({from: contributorAccountLocked24M, gas: 4000000});
 while (txpool.status.pending > 0) {
 }
 printTxData("tx8_1_1", tx8_1_1);
-printTxData("tx8_1_2", tx8_1_2);
-printTxData("tx8_1_3", tx8_1_3);
-printTxData("tx8_1_4", tx8_1_4);
-printTxData("tx8_1_5", tx8_1_5);
-printTxData("tx8_1_6", tx8_1_6);
 printBalances();
-failIfGasEqualsGasUsed(tx8_1_1, testMessage + " - burn 0.0001 GEL ac2. CHECK no movement");
-passIfGasEqualsGasUsed(tx8_1_2, testMessage + " - burn 0.000001 GEL ac5. CHECK no movement");
-failIfGasEqualsGasUsed(tx8_1_3, testMessage + " - approve burn 3 GEL ac3");
-failIfGasEqualsGasUsed(tx8_1_4, testMessage + " - approve burn 400 GEL ac4");
-failIfGasEqualsGasUsed(tx8_1_5, testMessage + " - burn 3 GEL ac3 from ac3. CHECK for movement");
-failIfGasEqualsGasUsed(tx8_1_6, testMessage + " - burn 400 GEL ac4 from ac8. CHECK for movement");
+failIfGasEqualsGasUsed(tx8_1_1, testMessage);
+printTokenContractDynamicDetails();
+console.log("RESULT: ");
+
+// -----------------------------------------------------------------------------
+var testMessage = "Test 9.1 Burn Tokens";
+console.log("RESULT: " + testMessage);
+var tx9_1_1 = token.burnFrom(account5, "100000000000000", {from: account2, gas: 100000});
+var tx9_1_2 = token.transfer("0x0",    "1000000000000", {from: account5, gas: 100000});
+var tx9_1_3 = token.approve("0x0",     "3000000000000000000", {from: account3, gas: 100000});
+var tx9_1_4 = token.approve("0x0",     "400000000000000000000", {from: account4, gas: 100000});
+while (txpool.status.pending > 0) {
+}
+var tx9_1_5 = token.burnFrom(account3, "3000000000000000000", {from: account3, gas: 100000});
+var tx9_1_6 = token.burnFrom(account4, "400000000000000000000", {from: account8, gas: 100000});
+while (txpool.status.pending > 0) {
+}
+printTxData("tx9_1_1", tx9_1_1);
+printTxData("tx9_1_2", tx9_1_2);
+printTxData("tx9_1_3", tx9_1_3);
+printTxData("tx9_1_4", tx9_1_4);
+printTxData("tx9_1_5", tx9_1_5);
+printTxData("tx9_1_6", tx9_1_6);
+printBalances();
+failIfGasEqualsGasUsed(tx9_1_1, testMessage + " - burn 0.0001 GEL ac2. CHECK no movement");
+passIfGasEqualsGasUsed(tx9_1_2, testMessage + " - burn 0.000001 GEL ac5. CHECK no movement");
+failIfGasEqualsGasUsed(tx9_1_3, testMessage + " - approve burn 3 GEL ac3");
+failIfGasEqualsGasUsed(tx9_1_4, testMessage + " - approve burn 400 GEL ac4");
+failIfGasEqualsGasUsed(tx9_1_5, testMessage + " - burn 3 GEL ac3 from ac3. CHECK for movement");
+failIfGasEqualsGasUsed(tx9_1_6, testMessage + " - burn 400 GEL ac4 from ac8. CHECK for movement");
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
 
 // -----------------------------------------------------------------------------
-var testMessage = "Test 9.1 Super owner can remove owner";
+var testMessage = "Test 10.1 Super owner can remove owner";
 console.log("RESULT: " + testMessage);
-var tx9_1 = token.removeOwner(ownerAccount, {from: tokenOwnerAccount, gas: 4000000});
+var tx10_1 = token.removeOwner(ownerAccount, {from: tokenOwnerAccount, gas: 4000000});
 while (txpool.status.pending > 0) {
 }
 printTokenContractDynamicDetails();
-failIfGasEqualsGasUsed(tx9_1, testMessage);
+failIfGasEqualsGasUsed(tx10_1, testMessage);
 
 
 // -----------------------------------------------------------------------------
-var testMessage = "Test 10.1 Change Ownership";
+var testMessage = "Test 11.1 Change Ownership";
 console.log("RESULT: " + testMessage);
-var tx10_1_1 = token.transferOwnership(minerAccount, {from: tokenOwnerAccount, gas: 100000});
+var tx11_1_1 = token.transferOwnership(minerAccount, {from: tokenOwnerAccount, gas: 100000});
 while (txpool.status.pending > 0) {
 }
-var tx10_1_2 = token.acceptOwnership({from: minerAccount, gas: 100000});
+var tx11_1_2 = token.acceptOwnership({from: minerAccount, gas: 100000});
 while (txpool.status.pending > 0) {
 }
-printTxData("tx10_1_1", tx10_1_1);
-printTxData("tx10_1_2", tx10_1_2);
+printTxData("tx11_1_1", tx11_1_1);
+printTxData("tx11_1_2", tx11_1_2);
 printBalances();
-failIfGasEqualsGasUsed(tx10_1_1, testMessage + " - Change owner");
-failIfGasEqualsGasUsed(tx10_1_2, testMessage + " - Accept ownership");
+failIfGasEqualsGasUsed(tx11_1_1, testMessage + " - Change owner");
+failIfGasEqualsGasUsed(tx11_1_2, testMessage + " - Accept ownership");
 printTokenContractDynamicDetails();
 console.log("RESULT: ");
 
